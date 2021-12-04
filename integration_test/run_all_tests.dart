@@ -15,12 +15,8 @@ void main() {
     //     (WidgetTester tester) async {
     //   await tester.pumpWidget(const MyApp());
 
-    //   // Tap the '+' icon and trigger a frame.
-    //   await tester.tap(find.byIcon(Icons.add));
-    //   await tester.pump();
     //   tester.printToConsole('first run before pumpAndSettle');
     //   await tester.pumpAndSettle();
-    //   tester.printToConsole('first run after pumpAndSettle');
     // });
 
     testWidgets(
@@ -28,55 +24,41 @@ void main() {
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
 
-        // Tap the '+' icon and trigger a frame.
-        await tester.tap(find.byIcon(Icons.add));
-        await tester.pump();
         tester.printToConsole('first run before pumpAndSettle');
         await tester.pumpAndSettle(const Duration(milliseconds: 100),
-            EnginePhase.sendSemanticsUpdate, const Duration(seconds: 15));
-        tester.printToConsole('first run after pumpAndSettle');
+            EnginePhase.sendSemanticsUpdate, const Duration(seconds: 5));
       },
       timeout: const Timeout(
         Duration(seconds: 20),
       ),
     );
 
-    // testWidgets(
-    //   'failure caused by timeout of testWidgets',
-    //   (WidgetTester tester) async {
-    //     await tester.pumpWidget(const MyApp());
-
-    //     // Tap the '+' icon and trigger a frame.
-    //     await tester.tap(find.byIcon(Icons.add));
-    //     await tester.pump();
-    //     tester.printToConsole('second run before pumpAndSettle');
-    //     await tester.pumpAndSettle(
-    //         const Duration(milliseconds: 100),
-    //         EnginePhase.sendSemanticsUpdate,
-    //         const Duration(seconds: 60));
-    //     tester.printToConsole('second run after pumpAndSettle');
-    //   },
-    //   timeout: const Timeout(
-    //     Duration(seconds: 20),
-    //   ),
-    // );
-
     testWidgets('test using pumpAndSettleWithTimeout',
         (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
 
-      // Tap the '+' icon and trigger a frame.
-      await tester.tap(find.byIcon(Icons.add));
-      await tester.pump();
       tester.printToConsole('third run before pumpAndSettleWithTimeout');
-      await tester.pumpAndSettleWithTimeout();
+      await tester.pumpAndSettleWithTimeout(seconds: 7);
     });
+
+    testWidgets(
+      'failure caused by timeout of testWidgets',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(const MyApp());
+
+        tester.printToConsole('second run before pumpAndSettle');
+        await tester.pumpAndSettle();
+      },
+      timeout: const Timeout(
+        Duration(seconds: 10),
+      ),
+    );
   });
 }
 
 extension PumpAndSettleWithTtimeout on WidgetTester {
-  Future<int> pumpAndSettleWithTimeout({int timeoutInSeconds = 30}) async {
+  Future<int> pumpAndSettleWithTimeout({int seconds = 30}) async {
     return pumpAndSettle(const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate, Duration(seconds: timeoutInSeconds));
+        EnginePhase.sendSemanticsUpdate, Duration(seconds: seconds));
   }
 }
