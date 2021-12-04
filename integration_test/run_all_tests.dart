@@ -15,7 +15,8 @@ void main() {
       'failure caused by timeout of pumpAndSettle',
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
-
+        final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
+        state.label = tester.testDescription;
         tester.printToConsole(tester.testDescription);
         await tester.pumpAndSettle(const Duration(milliseconds: 100),
             EnginePhase.sendSemanticsUpdate, const Duration(seconds: 5));
@@ -29,6 +30,8 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
 
+      final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
+      state.label = tester.testDescription;
       tester.printToConsole(tester.testDescription);
       await tester.pumpAndSettleWithTimeout(seconds: 7);
     });
@@ -38,6 +41,8 @@ void main() {
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
 
+        final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
+        state.label = tester.testDescription;
         tester.printToConsole(tester.testDescription);
         await tester.pumpAndSettle();
       },
@@ -50,6 +55,8 @@ void main() {
     //     (WidgetTester tester) async {
     //   await tester.pumpWidget(const MyApp());
 
+    //   final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
+    //   state.label = tester.testDescription;
     //   tester.printToConsole('first run before pumpAndSettle');
     //   await tester.pumpAndSettle();
     // });

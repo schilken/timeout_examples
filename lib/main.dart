@@ -27,12 +27,13 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage> createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   Timer? _timer;
+  var label = 'TimeoutTester';
 
   @override
   void initState() {
@@ -60,8 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Testing',
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              style: Theme.of(context).textTheme.headline5,
             ),
             Text(
               '$_counter',
