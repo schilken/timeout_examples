@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+
 import 'package:timer_test/main.dart';
 
 void main() {
@@ -8,7 +9,7 @@ void main() {
           as IntegrationTestWidgetsFlutterBinding)
       .defaultTestTimeout = const Timeout(Duration(seconds: 15));
   WidgetController.hitTestWarningShouldBeFatal = true;
-
+  WidgetsFlutterBinding.ensureInitialized();
   // group has no timeout parameter
   group('group of N tests', () {
     testWidgets(
@@ -33,7 +34,32 @@ void main() {
       final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
       state.label = tester.testDescription;
       tester.printToConsole(tester.testDescription);
-      await tester.pumpAndSettleWithTimeout(seconds: 7);
+      await tester.pumpAndSettleWithTimeout(seconds: 3);
+    });
+
+    testWidgets('show a dialog', (WidgetTester tester) async {
+      await tester.pumpWidget(const MyApp());
+      // Check internal state
+      final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
+      state.label = tester.testDescription;
+      tester.printToConsole(tester.testDescription);
+      await tester.pump();
+
+      // tester.printToConsole("All states: ");
+      // tester.allStates.forEach((s) => print(s));
+      MyAppState appState = tester.state(find.byType(MyApp));
+      NavigatorState navigator = appState.navKey.currentState!;
+//      tester.printToConsole(navigator.context.toString());
+      await showTestStatus(navigator, tester, 'test started');
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 1));
+      await showTestStatus(navigator, tester, 'test success!');
+
+      // Verify dialog was closed
+//      expect(find.byType(AlertDialog), findsNothing);
     });
 
     testWidgets(
@@ -63,9 +89,50 @@ void main() {
   });
 }
 
+Future<void> showTestStatus(
+    NavigatorState navigator, WidgetTester tester, String status) async {
+  showDialog(
+    context: navigator.context,
+    builder: (c) => _SomeDialog(title: status, content: tester.testDescription),
+  );
+  await tester.pumpNtimes(times: 50);
+  navigator.pop();
+  await tester.pumpNtimes(times: 3);
+}
+
 extension PumpAndSettleWithTtimeout on WidgetTester {
   Future<int> pumpAndSettleWithTimeout({int seconds = 30}) async {
     return pumpAndSettle(const Duration(milliseconds: 100),
         EnginePhase.sendSemanticsUpdate, Duration(seconds: seconds));
+  }
+
+  Future<void> pumpNtimes({int times = 3}) async {
+    return await Future.forEach(
+        Iterable.generate(times), (_) async => await pump());
+  }
+}
+
+class _SomeDialog extends StatelessWidget {
+  final String title;
+  final String content;
+  const _SomeDialog({
+    Key? key,
+    required this.title,
+    required this.content,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      // actions: [
+      //   OutlinedButton(
+      //     key: const ValueKey("okBtn"),
+      //     onPressed: () => Navigator.pop(context),
+      //     child: const Text("Ok"),
+      //   ),
+      // ],
+    );
   }
 }
