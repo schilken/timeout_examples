@@ -10,12 +10,15 @@ void main() {
       .defaultTestTimeout = const Timeout(Duration(seconds: 15));
   WidgetController.hitTestWarningShouldBeFatal = true;
   WidgetsFlutterBinding.ensureInitialized();
+
   // group has no timeout parameter
   group('group of N tests', () {
     testWidgets(
       'failure caused by timeout of pumpAndSettle',
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
+        await showTestStatus(tester, 'test started');
+
         final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
         state.label = tester.testDescription;
         tester.printToConsole(tester.testDescription);
@@ -30,6 +33,7 @@ void main() {
     testWidgets('test using pumpAndSettleWithTimeout',
         (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
+      await showTestStatus(tester, 'test started');
 
       final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
       state.label = tester.testDescription;
@@ -39,6 +43,7 @@ void main() {
 
     testWidgets('show a dialog', (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
+
       // Check internal state
       final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
       state.label = tester.testDescription;
@@ -47,16 +52,14 @@ void main() {
 
       // tester.printToConsole("All states: ");
       // tester.allStates.forEach((s) => print(s));
-      MyAppState appState = tester.state(find.byType(MyApp));
-      NavigatorState navigator = appState.navKey.currentState!;
 //      tester.printToConsole(navigator.context.toString());
-      await showTestStatus(navigator, tester, 'test started');
+      await showTestStatus(tester, 'test started');
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
-      await showTestStatus(navigator, tester, 'test success!');
+      await showTestStatus(tester, 'test success!');
 
       // Verify dialog was closed
 //      expect(find.byType(AlertDialog), findsNothing);
@@ -66,6 +69,7 @@ void main() {
       'failure caused by timeout of testWidgets',
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
+        await showTestStatus(tester, 'test started');
 
         final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
         state.label = tester.testDescription;
@@ -89,15 +93,17 @@ void main() {
   });
 }
 
-Future<void> showTestStatus(
-    NavigatorState navigator, WidgetTester tester, String status) async {
+Future<void> showTestStatus(WidgetTester tester, String status) async {
+  MyAppState appState = tester.state(find.byType(MyApp));
+  NavigatorState navigator = appState.navKey.currentState!;
+
   showDialog(
     context: navigator.context,
     builder: (c) => _SomeDialog(title: status, content: tester.testDescription),
   );
-  await tester.pumpNtimes(times: 50);
+  await tester.pumpNtimes(times: 200);
   navigator.pop();
-  await tester.pumpNtimes(times: 3);
+  await tester.pumpNtimes(times: 10);
 }
 
 extension PumpAndSettleWithTtimeout on WidgetTester {
