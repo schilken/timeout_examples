@@ -17,7 +17,7 @@ void main() {
       'failure caused by timeout of pumpAndSettle',
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
-        await showTestStatus(tester, 'test started');
+        await showTestStatus(tester, TestStatus.started);
 
         final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
         state.label = tester.testDescription;
@@ -33,7 +33,7 @@ void main() {
     testWidgets('test using pumpAndSettleWithTimeout',
         (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
-      await showTestStatus(tester, 'test started');
+      await showTestStatus(tester, TestStatus.started);
 
       final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
       state.label = tester.testDescription;
@@ -53,13 +53,13 @@ void main() {
       // tester.printToConsole("All states: ");
       // tester.allStates.forEach((s) => print(s));
 //      tester.printToConsole(navigator.context.toString());
-      await showTestStatus(tester, 'test started');
+      await showTestStatus(tester, TestStatus.started);
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
       await tester.pump(const Duration(seconds: 1));
-      await showTestStatus(tester, 'test success!');
+      await showTestStatus(tester, TestStatus.success);
 
       // Verify dialog was closed
 //      expect(find.byType(AlertDialog), findsNothing);
@@ -69,7 +69,7 @@ void main() {
       'failure caused by timeout of testWidgets',
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
-        await showTestStatus(tester, 'test started');
+        await showTestStatus(tester, TestStatus.started);
 
         final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
         state.label = tester.testDescription;
@@ -93,17 +93,58 @@ void main() {
   });
 }
 
-Future<void> showTestStatus(WidgetTester tester, String status) async {
+Future<void> showTestStatus(WidgetTester tester, TestStatus status) async {
   MyAppState appState = tester.state(find.byType(MyApp));
   NavigatorState navigator = appState.navKey.currentState!;
-
+  final statusString =
+      status == TestStatus.started ? 'Test started...' : 'Test succeeded!';
   showDialog(
     context: navigator.context,
-    builder: (c) => _SomeDialog(title: status, content: tester.testDescription),
+    builder: (c) => _SomeDialog(
+        title: statusString, status: status, name: tester.testDescription),
   );
   await tester.pumpNtimes(times: 200);
   navigator.pop();
   await tester.pumpNtimes(times: 10);
+}
+
+enum TestStatus {
+  started,
+  success,
+  failure,
+}
+
+class _SomeDialog extends StatelessWidget {
+  final Map<TestStatus, Color> colorForStatus = const {
+    TestStatus.started: Colors.white,
+    TestStatus.success: Colors.lightGreen,
+    TestStatus.failure: Colors.red,
+  };
+  final String name;
+  final String title;
+  final TestStatus status;
+  const _SomeDialog({
+    Key? key,
+    required this.name,
+    required this.status,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      content: Text(name),
+      backgroundColor: colorForStatus[status],
+      // actions: [
+      //   OutlinedButton(
+      //     key: const ValueKey("okBtn"),
+      //     onPressed: () => Navigator.pop(context),
+      //     child: const Text("Ok"),
+      //   ),
+      // ],
+    );
+  }
 }
 
 extension PumpAndSettleWithTtimeout on WidgetTester {
@@ -115,30 +156,5 @@ extension PumpAndSettleWithTtimeout on WidgetTester {
   Future<void> pumpNtimes({int times = 3}) async {
     return await Future.forEach(
         Iterable.generate(times), (_) async => await pump());
-  }
-}
-
-class _SomeDialog extends StatelessWidget {
-  final String title;
-  final String content;
-  const _SomeDialog({
-    Key? key,
-    required this.title,
-    required this.content,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(title),
-      content: Text(content),
-      // actions: [
-      //   OutlinedButton(
-      //     key: const ValueKey("okBtn"),
-      //     onPressed: () => Navigator.pop(context),
-      //     child: const Text("Ok"),
-      //   ),
-      // ],
-    );
   }
 }
