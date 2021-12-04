@@ -6,25 +6,17 @@ import 'package:timer_test/main.dart';
 void main() {
   (IntegrationTestWidgetsFlutterBinding.ensureInitialized()
           as IntegrationTestWidgetsFlutterBinding)
-      .defaultTestTimeout = const Timeout(Duration(seconds: 45));
+      .defaultTestTimeout = const Timeout(Duration(seconds: 15));
   WidgetController.hitTestWarningShouldBeFatal = true;
 
   // group has no timeout parameter
   group('group of N tests', () {
-    // testWidgets('failure caused by defaultTestTimeout',
-    //     (WidgetTester tester) async {
-    //   await tester.pumpWidget(const MyApp());
-
-    //   tester.printToConsole('first run before pumpAndSettle');
-    //   await tester.pumpAndSettle();
-    // });
-
     testWidgets(
       'failure caused by timeout of pumpAndSettle',
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
 
-        tester.printToConsole('first run before pumpAndSettle');
+        tester.printToConsole(tester.testDescription);
         await tester.pumpAndSettle(const Duration(milliseconds: 100),
             EnginePhase.sendSemanticsUpdate, const Duration(seconds: 5));
       },
@@ -37,7 +29,7 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
 
-      tester.printToConsole('third run before pumpAndSettleWithTimeout');
+      tester.printToConsole(tester.testDescription);
       await tester.pumpAndSettleWithTimeout(seconds: 7);
     });
 
@@ -46,13 +38,21 @@ void main() {
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
 
-        tester.printToConsole('second run before pumpAndSettle');
+        tester.printToConsole(tester.testDescription);
         await tester.pumpAndSettle();
       },
       timeout: const Timeout(
         Duration(seconds: 10),
       ),
     );
+
+    // testWidgets('failure caused by defaultTestTimeout',
+    //     (WidgetTester tester) async {
+    //   await tester.pumpWidget(const MyApp());
+
+    //   tester.printToConsole('first run before pumpAndSettle');
+    //   await tester.pumpAndSettle();
+    // });
   });
 }
 
