@@ -5,12 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "timer_test",
+            "name": "timeout_examples",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "timer_test (profile mode)",
+            "name": "timeout_examples (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"

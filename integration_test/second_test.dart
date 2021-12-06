@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'package:timer_test/main.dart';
+import 'package:timeout_examples/main.dart';
 
 import 'helper/show_test_status.dart';
 import 'helper/widget_tester_extension.dart';

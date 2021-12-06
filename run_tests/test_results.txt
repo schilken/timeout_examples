@@ -61,7 +61,7 @@ The test description was:
 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2145)
 .
 
-Time: 27.961
+Time: 38.317
 There were 2 failures:
 1) using pumpAndSettleWithTimeout(de.schilken.timeout_examples.MainActivityTest)
 java.lang.Exception: ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞═════════════════

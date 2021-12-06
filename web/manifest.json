@@ -1,6 +1,6 @@
 {
-    "name": "timer_test",
-    "short_name": "timer_test",
+    "name": "timeout_examples",
+    "short_name": "timeout_examples",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

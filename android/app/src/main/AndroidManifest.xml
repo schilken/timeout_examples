@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.schilken.timeout_examples">
    <application
-        android:label="timer_test"
+        android:label="timeout_examples"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

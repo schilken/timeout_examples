@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:timer_test/main.dart';
+import 'package:timeout_examples/main.dart';
 
 import 'widget_tester_extension.dart';
 
