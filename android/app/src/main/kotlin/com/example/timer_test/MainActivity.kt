@@ -1,4 +1,4 @@
-package com.example.timer_test
+package de.schilken.timeout_examples
 
 import io.flutter.embedding.android.FlutterActivity
 

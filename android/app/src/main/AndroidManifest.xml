@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.timer_test">
+    package="de.schilken.timeout_examples">
    <application
         android:label="timer_test"
         android:icon="@mipmap/ic_launcher">

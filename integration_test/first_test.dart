@@ -4,6 +4,9 @@ import 'package:integration_test/integration_test.dart';
 
 import 'package:timer_test/main.dart';
 
+import 'helper/show_test_status.dart';
+import 'helper/widget_tester_extension.dart';
+
 void main() {
   (IntegrationTestWidgetsFlutterBinding.ensureInitialized()
           as IntegrationTestWidgetsFlutterBinding)
@@ -12,9 +15,9 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   // group has no timeout parameter
-  group('group of N tests', () {
+  group('pumpAndSettle', () {
     testWidgets(
-      'failure caused by timeout of pumpAndSettle',
+      'failure caused by timeout',
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
         await showTestStatus(tester, TestStatus.started);
@@ -30,8 +33,7 @@ void main() {
       ),
     );
 
-    testWidgets('test using pumpAndSettleWithTimeout',
-        (WidgetTester tester) async {
+    testWidgets('using pumpAndSettleWithTimeout', (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
       await showTestStatus(tester, TestStatus.started);
 
@@ -65,21 +67,21 @@ void main() {
 //      expect(find.byType(AlertDialog), findsNothing);
     });
 
-    testWidgets(
-      'failure caused by timeout of testWidgets',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(const MyApp());
-        await showTestStatus(tester, TestStatus.started);
+    // testWidgets(
+    //   'failure caused by timeout of testWidgets',
+    //   (WidgetTester tester) async {
+    //     await tester.pumpWidget(const MyApp());
+    //     await showTestStatus(tester, TestStatus.started);
 
-        final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
-        state.label = tester.testDescription;
-        tester.printToConsole(tester.testDescription);
-        await tester.pumpAndSettle();
-      },
-      timeout: const Timeout(
-        Duration(seconds: 10),
-      ),
-    );
+    //     final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
+    //     state.label = tester.testDescription;
+    //     tester.printToConsole(tester.testDescription);
+    //     await tester.pumpAndSettle();
+    //   },
+    //   timeout: const Timeout(
+    //     Duration(seconds: 10),
+    //   ),
+    // );
 
     // testWidgets('failure caused by defaultTestTimeout',
     //     (WidgetTester tester) async {
@@ -91,70 +93,4 @@ void main() {
     //   await tester.pumpAndSettle();
     // });
   });
-}
-
-Future<void> showTestStatus(WidgetTester tester, TestStatus status) async {
-  MyAppState appState = tester.state(find.byType(MyApp));
-  NavigatorState navigator = appState.navKey.currentState!;
-  final statusString =
-      status == TestStatus.started ? 'Test started...' : 'Test succeeded!';
-  showDialog(
-    context: navigator.context,
-    builder: (c) => _SomeDialog(
-        title: statusString, status: status, name: tester.testDescription),
-  );
-  await tester.pumpNtimes(times: 200);
-  navigator.pop();
-  await tester.pumpNtimes(times: 10);
-}
-
-enum TestStatus {
-  started,
-  success,
-  failure,
-}
-
-class _SomeDialog extends StatelessWidget {
-  final Map<TestStatus, Color> colorForStatus = const {
-    TestStatus.started: Colors.white,
-    TestStatus.success: Colors.lightGreen,
-    TestStatus.failure: Colors.red,
-  };
-  final String name;
-  final String title;
-  final TestStatus status;
-  const _SomeDialog({
-    Key? key,
-    required this.name,
-    required this.status,
-    required this.title,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(title),
-      content: Text(name),
-      backgroundColor: colorForStatus[status],
-      // actions: [
-      //   OutlinedButton(
-      //     key: const ValueKey("okBtn"),
-      //     onPressed: () => Navigator.pop(context),
-      //     child: const Text("Ok"),
-      //   ),
-      // ],
-    );
-  }
-}
-
-extension PumpAndSettleWithTtimeout on WidgetTester {
-  Future<int> pumpAndSettleWithTimeout({int seconds = 30}) async {
-    return pumpAndSettle(const Duration(milliseconds: 100),
-        EnginePhase.sendSemanticsUpdate, Duration(seconds: seconds));
-  }
-
-  Future<void> pumpNtimes({int times = 3}) async {
-    return await Future.forEach(
-        Iterable.generate(times), (_) async => await pump());
-  }
 }

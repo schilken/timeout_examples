@@ -1,0 +1,4 @@
+--------- beginning of main
+12-06 13:43:40.941 13276 13299 I flutter : 00:23 +1 -2: (tearDownAll)
+12-06 13:43:40.964 13276 13299 I flutter : 00:23 +2 -2: Some tests failed.
+--------- beginning of system
