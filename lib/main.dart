@@ -25,7 +25,7 @@ class MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Timeout Test Page'),
     );
   }
 }
@@ -42,6 +42,7 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   Timer? _timer;
+  Size? size;
 
   @override
   void initState() {
@@ -61,6 +62,10 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (size == null) {
+      size = (context.findRenderObject() as RenderBox?)?.size;
+      print('size: $size');
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -70,7 +75,7 @@ class MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'TimeoutTester',
+              'TimeoutTester $size',
               textAlign: TextAlign.center,
               maxLines: 3,
               style: Theme.of(context).textTheme.headline5,
