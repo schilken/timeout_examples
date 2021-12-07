@@ -42,7 +42,6 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   Timer? _timer;
-  var label = 'TimeoutTester';
 
   @override
   void initState() {
@@ -71,7 +70,7 @@ class MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              label,
+              'TimeoutTester',
               textAlign: TextAlign.center,
               maxLines: 3,
               style: Theme.of(context).textTheme.headline5,

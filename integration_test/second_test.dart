@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-
 import 'package:timeout_examples/main.dart';
-
 import 'helper/show_test_status.dart';
-import 'helper/widget_tester_extension.dart';
 
 void main() {
   (IntegrationTestWidgetsFlutterBinding.ensureInitialized()
@@ -15,16 +12,13 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   // group has no timeout parameter
-  group('WidgetTester', () {
+  group('widgetTester', () {
     testWidgets(
-      'failure caused by timeout of testWidgets',
+      'fails after timeout given by parameter - second_test',
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
-        await showTestStatus(tester, TestStatus.started);
-
-        final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
-        state.label = tester.testDescription;
         tester.printToConsole(tester.testDescription);
+        await showTestStatus(tester, TestStatus.started);
         await tester.pumpAndSettle();
       },
       timeout: const Timeout(
@@ -32,13 +26,12 @@ void main() {
       ),
     );
 
-    testWidgets('failure caused by defaultTestTimeout',
+    testWidgets(
+        'fails after IntegrationTestWidgetsFlutterBinding.defaultTestTimeout - second_test',
         (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
-
-      final state = tester.state(find.byType(MyHomePage)) as MyHomePageState;
-      state.label = tester.testDescription;
       tester.printToConsole('first run before pumpAndSettle');
+      await showTestStatus(tester, TestStatus.started);
       await tester.pumpAndSettle();
     });
   });
