@@ -11,13 +11,10 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => MyAppState();
 }
 class MyAppState extends State<MyApp> {
-  // Create a key for the navigator, so our tests can control dialogs
-  GlobalKey<NavigatorState> navKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: navKey,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,

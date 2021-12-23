@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:timeout_examples/main.dart';
-import 'helper/show_test_status.dart';
 import 'helper/widget_tester_extension.dart';
 
 void main() {
@@ -19,7 +18,6 @@ void main() {
       (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
         tester.printToConsole(tester.testDescription);
-        await showTestStatus(tester, TestStatus.started);
         await tester.pumpAndSettle(const Duration(milliseconds: 100),
             EnginePhase.sendSemanticsUpdate, const Duration(seconds: 5));
       },
@@ -32,7 +30,6 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(const MyApp());
       tester.printToConsole(tester.testDescription);
-      await showTestStatus(tester, TestStatus.started);
       await tester.pumpAndSettleWithTimeout(seconds: 3);
     });
 
@@ -40,12 +37,10 @@ void main() {
       testWidgets('shows green dialog at the end', (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
         tester.printToConsole(tester.testDescription);
-        await showTestStatus(tester, TestStatus.started);
         await tester.pump(const Duration(seconds: 1));
         await tester.pump(const Duration(seconds: 1));
         await tester.pump(const Duration(seconds: 1));
         await tester.pump(const Duration(seconds: 1));
-        await showTestStatus(tester, TestStatus.success);
       });
     });
 
@@ -55,7 +50,6 @@ void main() {
         (WidgetTester tester) async {
           await tester.pumpWidget(const MyApp());
           tester.printToConsole(tester.testDescription);
-          await showTestStatus(tester, TestStatus.started);
           await tester.pumpAndSettle();
         },
         timeout: const Timeout(
@@ -69,7 +63,6 @@ void main() {
           (WidgetTester tester) async {
         await tester.pumpWidget(const MyApp());
         tester.printToConsole(tester.testDescription);
-        await showTestStatus(tester, TestStatus.started);
         await tester.pumpAndSettle();
       });
     });
