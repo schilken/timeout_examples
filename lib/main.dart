@@ -1,18 +1,15 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
 }
-
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => MyAppState();
 }
-
 class MyAppState extends State<MyApp> {
   // Create a key for the navigator, so our tests can control dialogs
   GlobalKey<NavigatorState> navKey = GlobalKey();
@@ -77,7 +74,6 @@ class MyHomePageState extends State<MyHomePage> {
             Text(
               'TimeoutTester $size',
               textAlign: TextAlign.center,
-              maxLines: 3,
               style: Theme.of(context).textTheme.headline5,
             ),
             Text(

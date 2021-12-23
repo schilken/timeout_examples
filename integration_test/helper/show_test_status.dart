@@ -47,13 +47,6 @@ class _SomeDialog extends StatelessWidget {
       title: Text(title),
       content: Text(name),
       backgroundColor: colorForStatus[status],
-      // actions: [
-      //   OutlinedButton(
-      //     key: const ValueKey("okBtn"),
-      //     onPressed: () => Navigator.pop(context),
-      //     child: const Text("Ok"),
-      //   ),
-      // ],
     );
   }
 }
