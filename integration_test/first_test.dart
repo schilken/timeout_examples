@@ -33,17 +33,6 @@ void main() {
       await tester.pumpAndSettleWithTimeout(seconds: 3);
     });
 
-    group('succeeding test', () {
-      testWidgets('shows green dialog at the end', (WidgetTester tester) async {
-        await tester.pumpWidget(const MyApp());
-        tester.printToConsole(tester.testDescription);
-        await tester.pump(const Duration(seconds: 1));
-        await tester.pump(const Duration(seconds: 1));
-        await tester.pump(const Duration(seconds: 1));
-        await tester.pump(const Duration(seconds: 1));
-      });
-    });
-
     group('testWidgets', () {
       testWidgets(
         'fails after timeout given by parameter',

@@ -6,8 +6,4 @@ extension PumpAndSettleWithTtimeout on WidgetTester {
         EnginePhase.sendSemanticsUpdate, Duration(seconds: seconds));
   }
 
-  Future<void> pumpNtimes({int times = 3}) async {
-    return await Future.forEach(
-        Iterable.generate(times), (_) async => await pump());
-  }
 }
