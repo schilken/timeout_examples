@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:timeout_examples/main.dart';
+//import 'package:timeout_examples/main.dart';
 
 import 'widget_tester_extension.dart';
 
 Future<void> showTestStatus(WidgetTester tester, TestStatus status) async {
-  MyAppState appState = tester.state(find.byType(MyApp));
-  NavigatorState navigator = appState.navKey.currentState!;
+//  tester.allStates.forEach((element) => print('state: $element'));
+  NavigatorState navigator = tester.state(find.byType(Navigator));
   final statusString =
       status == TestStatus.started ? 'Test started...' : 'Test succeeded!';
   showDialog(
