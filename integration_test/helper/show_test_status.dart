@@ -45,7 +45,7 @@ class _SomeDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(title),
-      content: Text(name),
+      content: Text('With description:\n\n$name'),
       backgroundColor: colorForStatus[status],
     );
   }
