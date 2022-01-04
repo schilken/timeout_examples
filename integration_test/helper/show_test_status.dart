@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-//import 'package:timeout_examples/main.dart';
+import 'package:pedantic/pedantic.dart';
 
 import 'widget_tester_extension.dart';
 
 Future<void> showTestStatus(WidgetTester tester, TestStatus status) async {
 //  tester.allStates.forEach((element) => print('state: $element'));
-  NavigatorState navigator = tester.state(find.byType(Navigator));
+  final NavigatorState navigator = tester.state(find.byType(Navigator));
   final statusString =
       status == TestStatus.started ? 'Test started...' : 'Test succeeded!';
-  showDialog(
+  unawaited(showDialog<_SomeDialog>(
     context: navigator.context,
     builder: (c) => _SomeDialog(
         title: statusString, status: status, name: tester.testDescription),
-  );
+  ));
   await tester.pumpNtimes(times: 100);
   navigator.pop();
   await tester.pumpNtimes(times: 10);

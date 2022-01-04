@@ -7,7 +7,6 @@ extension PumpAndSettleWithTimeout on WidgetTester {
   }
 
   Future<void> pumpNtimes({int times = 3}) async {
-    return await Future.forEach(
-        Iterable.generate(times), (_) async => await pump());
+    return Future.forEach<void>(Iterable.generate(times), (_) async => pump());
   }
 }
